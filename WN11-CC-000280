@@ -1,0 +1,45 @@
+<#
+.SYNOPSIS
+    This PowerShell script ensures that the maximum size of the Windows Application event log is at least 32768 KB (32 MB).
+
+.NOTES
+    Author          : Talamas Almonord
+    LinkedIn        : linhttps://www.linkedin.com/in/talamas-almonord-137733282/
+    GitHub          : https://github.com/taalmonord/taalmonord
+    Date Created    : 2026-09-16
+    Last Modified   : 2024-09-16
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-CC-000280
+    Documentation   : https://www.tenable.com/audits/items/DISA_STIG_Windows_11_v1r1.audit:70e8efb35401b65d5f64a67acd8dcd11
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN10-AU-000500).ps1 
+#>
+
+# YOUR CODE GOES HERE
+
+$RegistryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+$ValueName = "fPromptForPassword"
+
+# t does not exist
+if (-not (Test-Path $RegistryPath)) {
+    New-Item -Path $RegistryPath -Force | Out-Null
+}
+
+# Require password  Remote Desktop connections
+New-ItemProperty `
+    -Path $RegistryPath `
+    -Name $ValueName `
+    -PropertyType DWord `
+    -Value 1 `
+    -Force | Out-Null
